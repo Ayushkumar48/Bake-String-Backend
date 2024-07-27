@@ -1,14 +1,15 @@
-const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb');
-const cors = require('cors');
+const express = require("express");
+const { MongoClient, ObjectId } = require("mongodb");
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors({ origin: '*' }));
+app.use(cors({ origin: "https://bakestring.tech", credentials: true }));
 
-const uri = "mongodb+srv://ayushsuperstar48:ayush16@bake-string.meeaaiw.mongodb.net/?retryWrites=true&w=majority&appName=bake-string";
+const uri =
+  "mongodb+srv://ayushsuperstar48:ayush16@bake-string.meeaaiw.mongodb.net/?retryWrites=true&w=majority&appName=bake-string";
 const client = new MongoClient(uri);
 
 let db;
