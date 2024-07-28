@@ -25,7 +25,7 @@ async function main() {
 main().catch(console.error);
 
 // Get all todo lists
-app.get("/todos", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     const todos = await collection.find({}).toArray();
     res.status(200).json(todos);
@@ -35,7 +35,7 @@ app.get("/todos", async (req, res) => {
 });
 
 // Add a new todo list
-app.post("/todos", async (req, res) => {
+app.post("/", async (req, res) => {
   try {
     const todo = req.body;
     await collection.insertOne(todo);
@@ -46,7 +46,7 @@ app.post("/todos", async (req, res) => {
 });
 
 // Delete a todo list by id
-app.delete("/todos/:id", async (req, res) => {
+app.delete("/:id", async (req, res) => {
   try {
     const id = req.params.id;
     await collection.deleteOne({ _id: new ObjectId(id) });
