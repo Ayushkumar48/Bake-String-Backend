@@ -24,6 +24,11 @@ async function main() {
 
 main().catch(console.error);
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 // Get all todo lists
 app.get("/", async (req, res) => {
   try {
