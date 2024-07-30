@@ -6,7 +6,14 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors({ origin: "https://bakestring.tech" }));
+app.use(
+  cors({
+    origin: [
+      "https://main.d1gdu03z0k60cd.amplifyapp.com",
+      "http://localhost:3000",
+    ],
+  })
+);
 
 const uri =
   "mongodb+srv://ayushsuperstar48:ayush16@bake-string.meeaaiw.mongodb.net/?retryWrites=true&w=majority&appName=bake-string";
