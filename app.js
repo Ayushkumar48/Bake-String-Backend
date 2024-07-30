@@ -1,5 +1,6 @@
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
+const path = require("path");
 const cors = require("cors");
 
 const app = express();
@@ -30,6 +31,19 @@ async function main() {
 }
 
 main().catch(console.error);
+
+// get the auth file
+const file_path = path.join(__dirname, "D6ECED668C774C0275C052561D8C81DF.txt");
+app.get(
+  "/.well-known/pki-validation/D6ECED668C774C0275C052561D8C81DF.txt",
+  (req, res) => {
+    try {
+      res.sendFile(file_path);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 
 // Health check endpoint
 app.get("/health", (req, res) => {
