@@ -38,7 +38,7 @@ app.get(
   "/.well-known/pki-validation/D6ECED668C774C0275C052561D8C81DF.txt",
   (req, res) => {
     try {
-      res.sendFile(file_path);
+      res.status(200).sendFile(file_path);
     } catch (err) {
       console.log(err);
     }
