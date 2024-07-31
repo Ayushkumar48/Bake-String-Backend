@@ -6,7 +6,7 @@ const https = require("https");
 const fs = require("fs");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 443; // Change port to 443 for HTTPS
 
 const options = {
   key: fs.readFileSync(
@@ -39,19 +39,6 @@ async function main() {
 }
 
 main().catch(console.error);
-
-// get the auth file
-const file_path = path.join(__dirname, "D6ECED668C774C0275C052561D8C81DF.txt");
-app.get(
-  "/.well-known/pki-validation/D6ECED668C774C0275C052561D8C81DF.txt",
-  (req, res) => {
-    try {
-      res.status(200).sendFile(file_path);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-);
 
 // Health check endpoint
 app.get("/health", (req, res) => {
@@ -91,11 +78,6 @@ app.delete("/:id", async (req, res) => {
 });
 
 // Start HTTPS server
-https
-  .createServer(options, app)
-  .listen(port, "0.0.0.0", () => {
-    console.log(`Server running on https://0.0.0.0:${port}`);
-  })
-  .on("error", (err) => {
-    console.error("Failed to start server:", err);
-  });
+https.createServer(options, app).listen(port, "0.0.0.0", () => {
+  console.log(`Server running on https://0.0.0.0:${port}`);
+});
