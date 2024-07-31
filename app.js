@@ -2,9 +2,20 @@ const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
 const path = require("path");
 const cors = require("cors");
+const https = require("https");
+const fs = require("fs");
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+const options = {
+  key: fs.readFileSync(
+    "/etc/letsencrypt/live/bakestring.centralindia.cloudapp.azure.com/privkey.pem"
+  ),
+  cert: fs.readFileSync(
+    "/etc/letsencrypt/live/bakestring.centralindia.cloudapp.azure.com/fullchain.pem"
+  ),
+};
 
 app.use(express.json());
 app.use(
@@ -80,5 +91,5 @@ app.delete("/:id", async (req, res) => {
 });
 
 app.listen(port, "0.0.0.0", () => {
-  console.log(`Server running on http://0.0.0.0:${port}`);
+  console.log(`Server running on https://0.0.0.0:${port}`);
 });
