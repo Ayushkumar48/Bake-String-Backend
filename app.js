@@ -6,7 +6,7 @@ const https = require("https");
 const fs = require("fs");
 
 const app = express();
-const port = process.env.PORT || 443;
+const port = process.env.PORT || 3000;
 
 const options = {
   key: fs.readFileSync(
@@ -20,7 +20,7 @@ const options = {
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://bake-string.azurewebsites.net", "http://localhost:443"],
+    origin: ["https://bake-string.azurewebsites.net", "http://localhost:3000"],
   })
 );
 
