@@ -9,7 +9,10 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://bake-string.azurewebsites.net", "http://localhost:3000"],
+    origin: [
+      "https://main.d260avdayvt3w1.amplifyapp.com",
+      "http://localhost:3000",
+    ],
   })
 );
 
