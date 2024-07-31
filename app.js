@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      "https://bakestring.tech/",
+      "https://bakestring.tech",
       "https://main.d260avdayvt3w1.amplifyapp.com",
       "http://localhost:3000",
     ],
