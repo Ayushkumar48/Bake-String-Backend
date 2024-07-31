@@ -91,6 +91,11 @@ app.delete("/:id", async (req, res) => {
 });
 
 // Start HTTPS server
-https.createServer(options, app).listen(port, "0.0.0.0", () => {
-  console.log(`Server running on https://0.0.0.0:${port}`);
-});
+https
+  .createServer(options, app)
+  .listen(port, "0.0.0.0", () => {
+    console.log(`Server running on https://0.0.0.0:${port}`);
+  })
+  .on("error", (err) => {
+    console.error("Failed to start server:", err);
+  });
