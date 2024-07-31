@@ -2,20 +2,9 @@ const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
 const path = require("path");
 const cors = require("cors");
-const https = require("https");
-const fs = require("fs");
 
 const app = express();
-const port = 443; // Change port to 443 for HTTPS
-
-const options = {
-  key: fs.readFileSync(
-    "/etc/letsencrypt/live/bakestring.centralindia.cloudapp.azure.com/privkey.pem"
-  ),
-  cert: fs.readFileSync(
-    "/etc/letsencrypt/live/bakestring.centralindia.cloudapp.azure.com/fullchain.pem"
-  ),
-};
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(
@@ -77,7 +66,7 @@ app.delete("/:id", async (req, res) => {
   }
 });
 
-// Start HTTPS server
-https.createServer(options, app).listen(port, "0.0.0.0", () => {
-  console.log(`Server running on https://0.0.0.0:${port}`);
+// Start HTTP server
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server running on http://0.0.0.0:${port}`);
 });
