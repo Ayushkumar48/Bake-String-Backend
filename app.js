@@ -7,15 +7,7 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
-app.use(
-  cors({
-    origin: [
-      "https://bakestring.tech",
-      "https://main.d260avdayvt3w1.amplifyapp.com",
-      "http://localhost:5173",
-    ],
-  })
-);
+app.use(cors({ origin: "https://bakestring.tech" }));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
