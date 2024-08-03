@@ -7,10 +7,6 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
 app.use(
   cors({
     origin: [
@@ -20,6 +16,11 @@ app.use(
     ],
   })
 );
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
 
 const mongodburi = process.env.MONGODB_URI;
 
