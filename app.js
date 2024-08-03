@@ -1,76 +1,126 @@
 const express = require("express");
-const { MongoClient, ObjectId } = require("mongodb");
-const path = require("path");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const User = require("./Schemas/user");
+const Todo = require("./Schemas/todo");
+require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 3000;
-
 app.use(express.json());
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
 app.use(
   cors({
-    origin: [
-      "https://bakestring.tech",
-      "https://main.d260avdayvt3w1.amplifyapp.com",
-      "http://localhost:3000",
-    ],
+    origin: ["http://localhost:5173", "https://bakestring.tech"],
   })
 );
 
-const uri =
-  "mongodb+srv://ayushsuperstar48:ayush16@bake-string.meeaaiw.mongodb.net/?retryWrites=true&w=majority&appName=bake-string";
-const client = new MongoClient(uri);
-
-let db;
-let collection;
+const mongodburi = process.env.MONGODB_URI;
 
 async function main() {
-  await client.connect();
-  db = client.db("bake-string-DB");
-  collection = db.collection("userLists");
-  console.log("connected to bake-string-DB");
+  await mongoose.connect(mongodburi);
+  console.log("connected to mongodb");
 }
 
 main().catch(console.error);
 
-// Health check endpoint
-app.get("/health", (req, res) => {
-  res.status(200).send("OK");
+app.get("/", (req, res) => {
+  res.status(200);
 });
 
-// Get all todo lists
-app.get("/", async (req, res) => {
+app.post("/users", async (req, res) => {
   try {
-    const todos = await collection.find({}).toArray();
-    res.status(200).json(todos);
+    const { username } = req.body;
+    const data = await User.findOne({ username: username });
+    res.status(200).json({ exists: !!data });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "An error occured" });
   }
 });
 
-// Add a new todo list
-app.post("/", async (req, res) => {
+app.post("/email", async (req, res) => {
   try {
-    const todo = req.body;
-    await collection.insertOne(todo);
-    res.status(201).json(todo);
+    const result = await User.findOne({ email: req.body.email });
+    res.status(200).json({ exists: !!result });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: "An error occured" });
   }
 });
 
-// Delete a todo list by id
-app.delete("/:id", async (req, res) => {
+app.post("/saveUser", async (req, res) => {
   try {
-    const id = req.params.id;
-    await collection.deleteOne({ _id: new ObjectId(id) });
-    res.status(200).json({ message: "Todo deleted" });
+    const userData = req.body;
+    const result = await User.findOne({
+      username: userData.username,
+      email: userData.email,
+    });
+    if (!result) {
+      let newUser = new User(userData);
+      const data = await newUser.save();
+      res.status(200).json({
+        userId: data._id,
+        message: "Account created successfully",
+      });
+    } else {
+      res.status(409).json({ message: "User already exists" });
+    }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// Start HTTP server
-app.listen(port, "0.0.0.0", () => {
-  console.log(`Server running on http://0.0.0.0:${port}`);
+app.post("/todos", async (req, res) => {
+  try {
+    let cardData = await Todo.find({ userId: req.body.userId });
+    res.status(200).json(cardData);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/userlogin", async (req, res) => {
+  try {
+    let { username, password } = req.body;
+    const checkuser = await User.findOne({ username: username });
+
+    if (!checkuser) {
+      return res.status(400).json({ message: "User does not exist" });
+    }
+
+    const isPasswordValid = checkuser.password === password;
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    res.status(200).json({
+      userId: checkuser._id,
+      message: "Username and password matched",
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/addTodo", async (req, res) => {
+  try {
+    let newTodo = new Todo(req.body);
+    const result = await newTodo.save();
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ message: "An error occured while adding todo!!!" });
+  }
+});
+
+app.post("/deleteTodo", async (req, res) => {
+  try {
+    const deletedData = await Todo.deleteOne({ _id: req.body._id });
+    res.status(200).json({ _id: req.body._id });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "An error occured while deleting todo!!!" });
+  }
 });
