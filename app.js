@@ -13,7 +13,11 @@ app.listen(port, () => {
 });
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://bakestring.tech"],
+    origin: [
+      "https://bakestring.tech",
+      "https://main.d260avdayvt3w1.amplifyapp.com",
+      "http://localhost:5173",
+    ],
   })
 );
 
