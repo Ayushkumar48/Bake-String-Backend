@@ -9,11 +9,6 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: "https://bakestring.tech" }));
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
-
 const mongodburi = process.env.MONGODB_URI;
 
 async function main() {
@@ -120,4 +115,9 @@ app.post("/deleteTodo", async (req, res) => {
       .status(500)
       .json({ message: "An error occured while deleting todo!!!" });
   }
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });
