@@ -7,7 +7,13 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "https://bakestring.tech" }));
+app.use(
+  cors({
+    origin: "https://bakestring.tech",
+    methods: "GET,POST,OPTIONS",
+    allowedHeaders: "Origin, Content-Type, Accept, Authorization",
+  })
+);
 
 const mongodburi = process.env.MONGODB_URI;
 
