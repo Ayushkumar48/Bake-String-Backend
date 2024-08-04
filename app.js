@@ -12,7 +12,7 @@ app.use(
     origin: [
       "https://bakestring.tech",
       "http://localhost:5173",
-      "bakestring.azurewebsites.net",
+      "https://bakestring.vercel.app",
     ],
     methods: "GET,POST,OPTIONS",
     allowedHeaders: "Origin, Content-Type, Accept, Authorization",
