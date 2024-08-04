@@ -73,9 +73,10 @@ app.post("/saveUser", async (req, res) => {
   }
 });
 
-app.post("/todos", async (req, res) => {
+app.get("/todos", async (req, res) => {
   try {
-    let cardData = await Todo.find({ userId: req.body.userId });
+    const userId = req.query.userId; // Fetch userId from query parameters
+    let cardData = await Todo.find({ userId: userId });
     res.status(200).json(cardData);
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
