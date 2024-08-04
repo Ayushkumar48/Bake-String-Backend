@@ -9,7 +9,11 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://bakestring.tech", "http://localhost:5173"],
+    origin: [
+      "https://bakestring.tech",
+      "http://localhost:5173",
+      "bakestring.azurewebsites.net",
+    ],
     methods: "GET,POST,OPTIONS",
     allowedHeaders: "Origin, Content-Type, Accept, Authorization",
   })
